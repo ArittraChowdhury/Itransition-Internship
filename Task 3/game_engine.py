@@ -15,7 +15,9 @@ class GameEngine:
             user_die = ConsoleMenu.choose_die(self.dice_list)
             comp_die = next(d for d in self.dice_list if d != user_die)
         else:
-            comp_die = self.dice_list[1]  
+            import random
+            comp_die = random.choice(self.dice_list)
+
             print(f"I choose the {comp_die.faces} dice.")
             user_die = ConsoleMenu.choose_die([d for d in self.dice_list if d != comp_die])
 
