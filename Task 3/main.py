@@ -13,7 +13,7 @@ try:
     dice_list = DiceParser.parse(args)
 except ValueError as e:
     print("Error:", e)
-    print("Usage: python main.py 2,2,4,4,9,9 6,8,1,1,8,6 7,5,3,7,5,3")
+    print("Usage: python main.py and put like Die 1:2,2,4,4,9,9 Die 2:6,8,1,1,8,6 Die 3:7,5,3,7,5,3")
     sys.exit(1)
 
 GameEngine(dice_list).run()
