@@ -1,51 +1,34 @@
-from console_menu import ConsoleMenu
-from fair_random_generator import FairRandomGenerator
+import secrets
 from probability_calculator import ProbabilityCalculator
 from help_table import HelpTable
+from console_menu import ConsoleMenu
 
 class FirstMoveDecider:
     def __init__(self, dice_list):
         self.dice_list = dice_list
 
     def decide(self):
-        print("\nLet's decide who goes first.")
-        print("Pick 0 or 1 (or ? for help table):")
-        fr = FairRandomGenerator(1)  
-        print(f"HMAC: {fr.get_hmac()}")
+        print("\nLet's randomly decide who goes first.")
+        print("Type '?' to view the help table, or press Enter to continue.")
 
         while True:
-            user_input = ConsoleMenu.ask_choice(["0", "1", "x", "?"]).strip().lower()
-
-            if user_input == "x":
-                return None
-            elif user_input == "?":
+            choice = input("Your input (? or Enter): ").strip().lower()
+            if choice == "?":
                 self.show_help_table()
-                continue
-
-            if user_input not in ("0", "1"):
-                print("Invalid input. Please choose 0, 1, ?, or x.")
-                continue
-
-            try:
-                user_number = int(user_input)
-            except ValueError:
-                print("Invalid input.")
-                continue
-
-            result = fr.get_result(user_number)
-            computer_number = result['computer_number']
-            key = result['key']
-            combined = (user_number + computer_number) % 2
-
-            print(f"Computer chose: {computer_number} (KEY={key})")
-            print(f"Combined value: ({user_number} + {computer_number}) % 2 = {combined}")
-
-            if combined == 1:
-                print("You go first!\n")
-                return True
+            elif choice == "":
+                break
             else:
-                print("I go first!\n")
-                return False
+                print("Invalid input. Press Enter to proceed or '?' for help.")
+
+        
+        toss = secrets.randbelow(2)
+
+        if toss == 1:
+            print("You go first!\n")
+            return True
+        else:
+            print("I go first!\n")
+            return False
 
     def show_help_table(self):
         print("\nShowing probability help table...\n")
