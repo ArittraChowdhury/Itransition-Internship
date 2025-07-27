@@ -15,12 +15,12 @@ except ValueError as e:
     print("Usage: Enter number of dice >= 3. Each die like: 2,2,4,4,9,9")
     sys.exit(1)
 
-# ✅ Parse the dice input strings into Dice objects
+
 try:
     dice_list = DiceParser(args).parse()
 except ValueError as e:
     print("Error parsing dice:", e)
     sys.exit(1)
 
-# ✅ Run the game
+
 GameEngine(dice_list).run()

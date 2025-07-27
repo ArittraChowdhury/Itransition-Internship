@@ -10,7 +10,7 @@ class FirstMoveDecider:
     def decide(self):
         print("\nLet's decide who goes first.")
         print("Pick 0 or 1 (or ? for help table):")
-        fr = FairRandomGenerator(1)  # range 0–1
+        fr = FairRandomGenerator(1)  
         print(f"HMAC: {fr.get_hmac()}")
 
         while True:
