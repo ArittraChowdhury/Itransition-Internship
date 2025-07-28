@@ -1,29 +1,23 @@
 import secrets
-from hmac_generator import HMACGenerator
+import hmac
+import hashlib
 
 class FairRandomGenerator:
-    def __init__(self, upper_bound):
-        self.upper_bound = upper_bound
-        self.secret_key = HMACGenerator.generate_key()
-        self.computer_number = self._secure_random()
-
-        message = self.computer_number.to_bytes(2, 'big')
-        self.hmac = HMACGenerator(message, self.secret_key).compute_hmac()
-
-    def _secure_random(self):
-        while True:
-            rand = secrets.randbits(32)
-            if rand <= (2**32 // (self.upper_bound + 1)) * (self.upper_bound + 1) - 1:
-                return rand % (self.upper_bound + 1)
+    def __init__(self, max_value):
+        self.max_value = max_value
+        self.key = secrets.token_bytes(32)
+        self.computer_number = secrets.randbelow(max_value + 1)
+        self.hmac = hmac.new(self.key, str(self.computer_number).encode(), hashlib.sha3_256).hexdigest()
 
     def get_hmac(self):
         return self.hmac
 
     def get_result(self, user_number):
-        result = (self.computer_number + user_number) % (self.upper_bound + 1)
+        if not (0 <= user_number <= self.max_value):
+            raise ValueError("Invalid number")
+        modular_result = (user_number - self.computer_number) % (self.max_value + 1)
         return {
-            "user_number": user_number,
-            "computer_number": self.computer_number,
-            "modular_result": result,
-            "key": self.secret_key.hex()
+            'modular_result': modular_result,
+            'computer_number': self.computer_number,
+            'key': self.key.hex()
         }
